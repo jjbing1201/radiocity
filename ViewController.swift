@@ -3,7 +3,8 @@ import UIKit
 import Foundation
 import MediaPlayer
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HttpProtocol {
+// 注意，遵循了协议，必须要实现协议的方法才可以
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HttpProtocol, channel_review_protocol{
     // 本页面的基础组件基础引用，也就是组件与类进行关联的方式
     @IBOutlet weak var tv: UITableView!
     @IBOutlet weak var lv: UIImageView!
@@ -28,7 +29,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         Ohttp.onSearch("http://douban.fm/j/mine/playlist?channel=0")
         
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -97,7 +98,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.lv.image = image
         }
     }
+//MARK: - 页面跳转函数
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        var channelC:channelcontroller = segue.destinationViewController as channelcontroller
+        channelC.delegate = self // 如果代理不设置回来，则回调会无响应
+        channelC.channelData = self.channelData
+    }
     
+    func onChangeChannel(channel_id:String) {
+        let url:String = "http://douban.fm/j/mine/playlist?\(channel_id)"
+        Ohttp.onSearch(url)
+    }
     func didReceiveResult(results:NSDictionary)
     {
         if (results["song"] != nil) {
