@@ -21,7 +21,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var imageCache = Dictionary<String, UIImage>()
     // 播放器声明
     var audioPlayer:MPMoviePlayerController = MPMoviePlayerController()
+    // 进度条时间延迟
+    var timer:NSTimer?
     
+//MARK: - 全局定义函数
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -29,6 +32,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         Ohttp.onSearch("http://www.douban.com/j/app/radio/channels")
         Ohttp.onSearch("http://douban.fm/j/mine/playlist?channel=0")
         
+        // 初始化将进度条置为0
+        progressView.setProgress(0.0, animated: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -36,11 +41,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         // Dispose of any resources that can be recreated.
     }
 
+//MARK: - 返回指定的单元格 
     // Return -> TableView Row's Count
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
         return tableData.count
     }
-//MARK: - 返回指定的单元格 
+    
     // cell 来进行反馈所有的内容给用户所见, 注意使用的是 cellForRowAtIndexPath 并且需要返回cell的实际内容
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "Doubans")
@@ -80,9 +86,47 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //MARK: - 音乐播放控制
     // 设置音乐的图片，并且保证
     func onSetAudio(url: String){
+        timer?.invalidate() //停止计时内容
+        progressTime.text = "00:00"
         self.audioPlayer.stop()
         self.audioPlayer.contentURL = NSURL(string: url)
         self.audioPlayer.play()
+        timer=NSTimer.scheduledTimerWithTimeInterval(0.4, target: self, selector: "onProcessSchedule", userInfo: nil, repeats: true)
+    }
+    func onProcessSchedule() {
+        
+        let current = audioPlayer.currentPlaybackTime // 当前播放长度
+        
+        // 整体动画效果
+        if (current > 0.0) {
+            // 整体进度条动画效果
+            let t = audioPlayer.duration // 总长度
+            let p:CFloat = CFloat(current/t)
+            progressView.setProgress(p, animated: true)
+            
+            // 整体文本对应结果
+            let all:Int = Int(current)
+            let second:Int = Int(all % 60)
+            let minute:Int = Int(all / 60)
+            var timeForLabel = ""
+            
+            //给分补位0
+            if (minute < 10){
+                timeForLabel = "0\(minute)"
+            }else{
+                timeForLabel = "\(minute)"
+            }
+            //给秒补位0
+            if (second < 10){
+                timeForLabel += ":0\(second)"
+            }else{
+                timeForLabel += ":\(second)"
+            }
+            
+            progressTime.text = timeForLabel
+        }
+        
+        
     }
     // 异步设置图片内容
     func onSetImage(url: String){
