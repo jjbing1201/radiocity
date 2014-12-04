@@ -11,6 +11,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     @IBOutlet weak var lv: UIImageView!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var progressTime: UILabel!
+    @IBOutlet var tapTouch: UITapGestureRecognizer! = nil
+    @IBOutlet weak var btn: UIImageView!
     
     var Ohttp:HttpController = HttpController()
     
@@ -23,6 +25,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var audioPlayer:MPMoviePlayerController = MPMoviePlayerController()
     // 进度条时间延迟
     var timer:NSTimer?
+    // 触摸点击事件
+    @IBAction func onTapTouch(sender: UITapGestureRecognizer) {
+        // 点击音乐图片的时候，显示继续播放button，并且停止音乐
+        if (sender.view == lv) {
+            btn.hidden = false
+            audioPlayer.pause()
+            btn.addGestureRecognizer(tapTouch)
+            lv.removeGestureRecognizer(tapTouch)
+        // 反之
+        } else if (sender.view == btn){
+            btn.hidden = true
+            audioPlayer.play()
+            btn.removeGestureRecognizer(tapTouch)
+            lv.addGestureRecognizer(tapTouch)
+        }
+    }
     
 //MARK: - 全局定义函数
     override func viewDidLoad() {
@@ -34,6 +52,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         // 初始化将进度条置为0
         progressView.setProgress(0.0, animated: true)
+        
+        // 初始化手势粘贴动作 可以进行add或者remove
+        lv.addGestureRecognizer(tapTouch)
     }
     
     override func didReceiveMemoryWarning() {
@@ -92,6 +113,10 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         self.audioPlayer.contentURL = NSURL(string: url)
         self.audioPlayer.play()
         timer=NSTimer.scheduledTimerWithTimeInterval(0.4, target: self, selector: "onProcessSchedule", userInfo: nil, repeats: true)
+        
+        btn.removeGestureRecognizer(tapTouch)
+        btn.hidden = true
+        lv.addGestureRecognizer(tapTouch)
     }
     func onProcessSchedule() {
         

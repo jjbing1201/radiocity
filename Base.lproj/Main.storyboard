@@ -12,7 +12,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doubanfm.jpg" id="oIc-ON-nHW">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="doubanfm.jpg" id="oIc-ON-nHW">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
@@ -62,17 +62,32 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                             </view>
+                            <imageView hidden="YES" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="stopandcontinue-120.png" id="RjY-5e-iH1">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="320"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="FGh-F7-MIT" appends="YES" id="zWU-Gt-2E2"/>
+                                </connections>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="btn" destination="RjY-5e-iH1" id="pSZ-kl-DQZ"/>
                         <outlet property="lv" destination="oIc-ON-nHW" id="7fI-lt-ivT"/>
                         <outlet property="progressTime" destination="0ce-hx-vtb" id="lsD-e2-nCV"/>
                         <outlet property="progressView" destination="o2X-dk-rDa" id="nLC-YV-gZQ"/>
+                        <outlet property="tapTouch" destination="FGh-F7-MIT" id="weL-T5-oEh"/>
                         <outlet property="tv" destination="ZS0-Xc-jYh" id="e0w-Cr-pzz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="FGh-F7-MIT">
+                    <connections>
+                        <action selector="onTapTouch:" destination="vXZ-lx-hvc" id="x3b-Rp-olk"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="124" y="306"/>
         </scene>
@@ -124,6 +139,7 @@
     <resources>
         <image name="buttonclick_4630.png" width="46" height="30"/>
         <image name="doubanfm.jpg" width="800" height="600"/>
+        <image name="stopandcontinue-120.png" width="120" height="120"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
