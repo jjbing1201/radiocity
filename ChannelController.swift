@@ -1,5 +1,6 @@
 
 import UIKit
+import QuartzCore
 
 // 在本文件中，只是定义了向回传的内容方法和实现传递的方式，具体的内容，通过protocol传递回去
 protocol channel_review_protocol{
@@ -29,7 +30,7 @@ class channelcontroller: UIViewController, UITableViewDataSource, UITableViewDel
 //MARK: - 复写TableViewDataSource的相关方法
     // Return -> TableView Row's Count
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return 10
+        return channelData.count
     }
     // 返回指定的单元格 cell
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -51,6 +52,13 @@ class channelcontroller: UIViewController, UITableViewDataSource, UITableViewDel
         delegate?.onChangeChannel(channel) // 向回传的方法调用
         
         self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
+        UIView.animateWithDuration(0.25, animations: {
+            cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
+        })
     }
 }
 

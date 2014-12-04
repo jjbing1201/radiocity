@@ -2,6 +2,7 @@
 import UIKit
 import Foundation
 import MediaPlayer
+import QuartzCore   // 视觉展示核心
 
 // 注意，遵循了协议，必须要实现协议的方法才可以
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, HttpProtocol, channel_review_protocol{
@@ -126,5 +127,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             self.channelData = results["channels"] as NSArray
         }
     }
-
+//MARK: - 视觉实现动画部分
+    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+        cell.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1)
+        UIView.animateWithDuration(0.25, animations: {
+            cell.layer.transform = CATransform3DMakeScale(1, 1, 1)
+        })
+    }
 }
